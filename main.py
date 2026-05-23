@@ -7,13 +7,23 @@ import sys           # Exits the program cleanly on errors or completion
 
 
 def start_program():
-    print("Johness The Dissector")
+
     pass
 
-def dictionary_attack(hash):
-    pass
+def dictionary_attack(user_input_hash,selected_hash_algorithm):
+    with open("rockyou.txt", "r", encoding="utf-8", errors="ignore") as file:
+        for password_entry in file:
+            password = password_entry.strip()
+            password_hash = hash_password(password,selected_hash_algorithm)
+
+            # compare hashes
+            if user_input_hash == password_hash:
+                return True
+
 
 def brute_force_attack():
+
+    pass
 
 
 def hash_password(plain_password, selected_hash_algorithm):
