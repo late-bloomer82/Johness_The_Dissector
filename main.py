@@ -20,7 +20,7 @@ def dictionary_attack(user_input_password_hash, selected_hash_algorithm):
             password = password_entry.strip()
             password_hash = hash_password(password,selected_hash_algorithm)
             if user_input_password_hash == password_hash:
-                return True
+                return password
 
 
 def brute_force_attack(min_length, max_length, character_set, user_input_password_hash, selected_hash_algorithm):
