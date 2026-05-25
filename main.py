@@ -5,6 +5,13 @@ import time          # Measures execution time of cracking attempts
 import os            # Checks file existence (e.g., wordlist validation)
 import sys           # Exits the program cleanly on errors or completion
 
+# allowed preset config
+CHARACTER_PRESETS = {
+        "lowercase": "abcdefghijklmnopqrstuvwxyz",
+        "digits": "0123456789",
+        "lowerdigits": "abcdefghijklmnopqrstuvwxyz0123456789",
+        "alphanumeric": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    }
 
 def start_program():
     parser = argparse.ArgumentParser(
@@ -12,6 +19,7 @@ def start_program():
         description = "Password cracker",
     )
     parser.add_argument()
+
 
 def dictionary_attack(user_input_password_hash, selected_hash_algorithm):
     user_password_hash = normalize_user_password_hash(user_input_password_hash)
@@ -26,12 +34,7 @@ def dictionary_attack(user_input_password_hash, selected_hash_algorithm):
 
 def brute_force_attack(min_length, max_length, character_set, user_input_password_hash, selected_hash_algorithm):
     user_password_hash = normalize_user_password_hash(user_input_password_hash)
-    CHARACTER_PRESETS = {
-        "lowercase": "abcdefghijklmnopqrstuvwxyz",
-        "digits": "0123456789",
-        "lowerdigits": "abcdefghijklmnopqrstuvwxyz0123456789",
-        "alphanumeric": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-    }
+
     chosen_preset = CHARACTER_PRESETS[character_set.lower().strip()]
 
     # Go through each possible password length
@@ -46,7 +49,6 @@ def brute_force_attack(min_length, max_length, character_set, user_input_passwor
             hashed_combination = hash_password(password_combination, selected_hash_algorithm)
             if hashed_combination == user_password_hash:
                 return password_combination
-
 
 
 def hash_password(plain_password, selected_hash_algorithm):
