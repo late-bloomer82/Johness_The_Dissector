@@ -7,23 +7,44 @@ import sys           # Exits the program cleanly on errors or completion
 
 
 def start_program():
+    parser = argparse.ArgumentParser(
+        prog = "Johness The Dissector",
+        description = "Password cracker",
+    )
+    parser.add_argument()
 
-    pass
-
-def dictionary_attack(user_input_hash,selected_hash_algorithm):
+def dictionary_attack(user_input_password_hash, selected_hash_algorithm):
+    # compare every entry with target hash
     with open("rockyou.txt", "r", encoding="utf-8", errors="ignore") as file:
         for password_entry in file:
             password = password_entry.strip()
             password_hash = hash_password(password,selected_hash_algorithm)
-
-            # compare hashes
-            if user_input_hash == password_hash:
+            if user_input_password_hash == password_hash:
                 return True
 
 
-def brute_force_attack():
+def brute_force_attack(min_length, max_length, character_set, user_input_password_hash, selected_hash_algorithm):
+    CHARACTER_PRESETS = {
+        "lowercase": "abcdefghijklmnopqrstuvwxyz",
+        "digits": "0123456789",
+        "lowerdigits": "abcdefghijklmnopqrstuvwxyz0123456789",
+        "alphanumeric": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    }
+    chosen_preset = CHARACTER_PRESETS[character_set.lower().strip()]
 
-    pass
+    # Go through each possible password length
+    for password_combination_length in range(min_length, max_length + 1):
+
+        # create an object that produces every possible combination
+        iterator = itertools.product(chosen_preset, repeat = password_combination_length)
+
+        # hash each combination and compare it
+        for combination_tuple in iterator:
+            password_combination = "".join(combination_tuple)
+            hashed_combination = hash_password(password_combination, selected_hash_algorithm)
+            if hashed_combination == user_input_password_hash:
+                return password_combination
+
 
 
 def hash_password(plain_password, selected_hash_algorithm):
