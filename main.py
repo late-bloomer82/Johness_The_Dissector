@@ -14,16 +14,18 @@ def start_program():
     parser.add_argument()
 
 def dictionary_attack(user_input_password_hash, selected_hash_algorithm):
+    user_password_hash = normalize_user_password_hash(user_input_password_hash)
     # compare every entry with target hash
     with open("rockyou.txt", "r", encoding="utf-8", errors="ignore") as file:
         for password_entry in file:
             password = password_entry.strip()
-            password_hash = hash_password(password,selected_hash_algorithm)
-            if user_input_password_hash == password_hash:
+            wordlist_password_hash = hash_password(password,selected_hash_algorithm)
+            if user_password_hash == wordlist_password_hash:
                 return password
 
 
 def brute_force_attack(min_length, max_length, character_set, user_input_password_hash, selected_hash_algorithm):
+    user_password_hash = normalize_user_password_hash(user_input_password_hash)
     CHARACTER_PRESETS = {
         "lowercase": "abcdefghijklmnopqrstuvwxyz",
         "digits": "0123456789",
@@ -42,7 +44,7 @@ def brute_force_attack(min_length, max_length, character_set, user_input_passwor
         for combination_tuple in iterator:
             password_combination = "".join(combination_tuple)
             hashed_combination = hash_password(password_combination, selected_hash_algorithm)
-            if hashed_combination == user_input_password_hash:
+            if hashed_combination == user_password_hash:
                 return password_combination
 
 
@@ -56,3 +58,7 @@ def hash_password(plain_password, selected_hash_algorithm):
     # hash plain password
     hash_obj.update(plain_password.encode())
     return hash_obj.hexdigest()
+
+
+def normalize_user_password_hash(user_password_hash):
+    return user_password_hash.lower().strip()
