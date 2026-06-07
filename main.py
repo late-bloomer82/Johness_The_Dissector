@@ -16,24 +16,86 @@ CHARACTER_PRESETS = {
 def start_program():
     parser = argparse.ArgumentParser(
         prog = "Johness The Dissector",
-        usage= "This program attempts to crack a password hash using brute force, or dictionaries.",
-        help= ''
+        description=(
+            "CLI password hash cracking tool.\n\n"
+            "Johness The Dissector attempts to recover the plaintext password "
+            "for a supported hash using either dictionary mode or brute force mode.\n\n"
+            "Supported hash algorithms: md5, sha1, sha256, sha512."),
+        epilog=(
+            "Examples:\n"
+            "  python johness.py dictionary --hash <hash> --algorithm sha256 --wordlist wordlist.txt\n"
+            "  python johness.py bruteforce --hash <hash> --algorithm sha256 --character-preset lowercase --min-length 1 --max-length 4" ),
+        formatter_class=argparse.RawDescriptionHelpFormatter
     )
     subparsers = parser.add_subparsers(dest='mode', required=True)
 
     # Dictionary mode
-    dictionary_parser = subparsers.add_parser('dictionary')
-    dictionary_parser.add_argument('--hash', required = True, help = 'password hash')
-    dictionary_parser.add_argument('--algorithm', default= 'sha256', choices = ['md5', 'sha1','sha256', 'sha512'], help = 'hashing algorithm, md5, sha1, sha256, and sha512')
-    dictionary_parser.add_argument('--wordlist', required = True, help = 'password wordlist')
+    dictionary_parser = subparsers.add_parser(
+        "dictionary",
+        help="Try passwords from a wordlist file.",
+    )
+
+    dictionary_parser.add_argument(
+        "--hash",
+        required=True,
+        help="Target password hash to crack.",
+    )
+
+    dictionary_parser.add_argument(
+        "--algorithm",
+        default="sha256",
+        choices=["md5", "sha1", "sha256", "sha512"],
+        help="Hashing algorithm to use. Options: md5, sha1, sha256, sha512. Default: sha256.",
+    )
+
+    dictionary_parser.add_argument(
+        "--wordlist",
+        required=True,
+        help="Path to a password wordlist file.",
+    )
 
     # Brute force mode
-    brute_force_parser = subparsers.add_parser('bruteforce')
-    brute_force_parser.add_argument('--hash', required = True, help = 'password hash')
-    brute_force_parser.add_argument('--algorithm', default= 'sha256', choices = ['md5', 'sha1','sha256', 'sha512'], help = 'hashing algorithm, md5, sha1, sha256, or sha512')
-    brute_force_parser.add_argument('--character_preset', choices= CHARACTER_PRESETS, default= 'alphaanumeric', help = 'character preset to be used, lowercase, digits, lowerdigits or alphanumeric')
-    brute_force_parser.add_argument('--min_length', type = int, default= 3, help = 'minimum length of the password')
-    brute_force_parser.add_argument('--max_length', type = int,  default=7, help = 'maximum length of the password')
+    brute_force_parser = subparsers.add_parser(
+        "bruteforce",
+        help="Generate password guesses using a character preset.",
+    )
+
+    brute_force_parser.add_argument(
+        "--hash",
+        required=True,
+        help="Target password hash to crack.",
+    )
+
+    brute_force_parser.add_argument(
+        "--algorithm",
+        default="sha256",
+        choices=["md5", "sha1", "sha256", "sha512"],
+        help="Hashing algorithm to use. Options: md5, sha1, sha256, sha512. Default: sha256.",
+    )
+
+    brute_force_parser.add_argument(
+        "--character-preset",
+        choices=CHARACTER_PRESETS,
+        default="alphanumeric",
+        help=(
+            "Character preset to use. Options: lowercase, digits, lowerdigits, "
+            "alphanumeric. Default: alphanumeric."
+        ),
+    )
+
+    brute_force_parser.add_argument(
+        "--min-length",
+        type=int,
+        default=3,
+        help="Minimum password length to try. Default: 3.",
+    )
+
+    brute_force_parser.add_argument(
+        "--max-length",
+        type=int,
+        default=6,
+        help="Maximum password length to try. Default: 6.",
+    )
 
     # parse arguments
     args = parser.parse_args()
