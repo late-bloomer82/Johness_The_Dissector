@@ -31,12 +31,20 @@ def start_program():
     brute_force_parser = subparsers.add_parser('bruteforce')
     brute_force_parser.add_argument('--hash', required = True, help = 'password hash')
     brute_force_parser.add_argument('--algorithm', default= 'sha256', choices = ['md5', 'sha1','sha256', 'sha512'], help = 'hashing algorithm, md5, sha1, sha256, or sha512')
-    brute_force_parser.add_argument('--character_preset', choices= CHARACTER_PRESETS, default= 'aplhanumeric', help = 'character preset to be used, lowercase, digits, lowerdigits or alphanumeric')
+    brute_force_parser.add_argument('--character_preset', choices= CHARACTER_PRESETS, default= 'alphaanumeric', help = 'character preset to be used, lowercase, digits, lowerdigits or alphanumeric')
     brute_force_parser.add_argument('--min_length', type = int, default= 3, help = 'minimum length of the password')
     brute_force_parser.add_argument('--max_length', type = int,  default=7, help = 'maximum length of the password')
 
     # parse arguments
     args = parser.parse_args()
+
+    # validate brute force password length arguments
+    if args.min_length < 3:
+        print("Minimum length of the password is 3")
+        return
+    if args.max_length > 8:
+        print("Maximum length of the password is 8")
+        return
 
     # execute attacks
     start_time = time.perf_counter()
@@ -50,7 +58,7 @@ def start_program():
     if password is not None:
         print(f"A match has been found!\nYour password is {password}")
     else:
-        print("Your password could not be found. Try again.")
+        print("Your password could not be found. Please try again.")
 
     print(f"Total time elapsed : {total_time_elapsed:.2f} seconds")
 
