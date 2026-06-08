@@ -173,3 +173,6 @@ def hash_password(plain_password, selected_hash_algorithm):
 
 def normalize_user_password_hash(user_password_hash):
     return user_password_hash.lower().strip()
+
+if __name__ == "__johness__":
+    start_program()
