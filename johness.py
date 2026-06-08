@@ -20,7 +20,8 @@ def start_program():
             "CLI password hash cracking tool.\n\n"
             "Johness The Dissector attempts to recover the plaintext password "
             "for a supported hash using either dictionary mode or brute force mode.\n\n"
-            "Supported hash algorithms: md5, sha1, sha256, sha512."),
+            "Supported hash algorithms: md5, sha1, sha256, sha512.\n"
+            "The selected algorithm must match the algorithm used to create the target hash."),
         epilog=(
             "Examples:\n"
             "  python johness.py dictionary --hash <hash> --algorithm sha256 --wordlist wordlist.txt\n"
@@ -100,19 +101,20 @@ def start_program():
     # parse arguments
     args = parser.parse_args()
 
-    # validate brute force password length arguments
-    if args.min_length < 3:
-        print("Minimum length of the password is 3")
-        return
-    if args.max_length > 8:
-        print("Maximum length of the password is 8")
-        return
-
     # execute attacks
     start_time = time.perf_counter()
     if args.mode == 'dictionary':
         password = dictionary_attack(args.hash, args.algorithm, args.wordlist)
+
     elif args.mode == 'bruteforce':
+
+        # validate brute force password length arguments
+        if args.min_length < 3:
+            print("Minimum length of the password is 3")
+            return
+        if args.max_length > 8:
+            print("Maximum length of the password is 8")
+            return
         password = brute_force_attack(args.min_length, args.max_length, args.character_preset, args.hash, args.algorithm)
     total_time_elapsed = time.perf_counter() - start_time
 
@@ -174,5 +176,5 @@ def hash_password(plain_password, selected_hash_algorithm):
 def normalize_user_password_hash(user_password_hash):
     return user_password_hash.lower().strip()
 
-if __name__ == "__johness__":
+if __name__ == "__main__":
     start_program()
