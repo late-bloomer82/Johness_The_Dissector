@@ -129,12 +129,16 @@ def start_program():
 def dictionary_attack(user_input_password_hash, selected_hash_algorithm, wordlist_path):
     user_password_hash = normalize_user_password_hash(user_input_password_hash)
     # compare every entry with target hash
-    with open(wordlist_path, "r", encoding="utf-8", errors="ignore") as file:
-        for password_entry in file:
-            password = password_entry.strip()
-            wordlist_password_hash = hash_password(password,selected_hash_algorithm)
-            if user_password_hash == wordlist_password_hash:
-                return password
+    try:
+        with open(wordlist_path, "r", encoding="utf-8", errors="ignore") as file:
+            for password_entry in file:
+                password = password_entry.strip()
+                wordlist_password_hash = hash_password(password, selected_hash_algorithm)
+                if user_password_hash == wordlist_password_hash:
+                    return password
+    except FileNotFoundError as e:
+        print(f"{e}. Wordlist could not be found.")
+        return None
 
 
 def brute_force_attack(min_length, max_length, character_set, user_input_password_hash, selected_hash_algorithm):
@@ -153,6 +157,7 @@ def brute_force_attack(min_length, max_length, character_set, user_input_passwor
             hashed_combination = hash_password(password_combination, selected_hash_algorithm)
             if hashed_combination == user_password_hash:
                 return password_combination
+
 
 
 def hash_password(plain_password, selected_hash_algorithm):
