@@ -66,6 +66,14 @@ Large wordlists, such as `rockyou.txt`, should not be committed to GitHub.
 * Does not support salted hashes or advanced hash formats
 * Brute force mode can become very slow as password length and character set size increase
 
+## Usage Suggestions
+
+- Start with dictionary mode if you have a relevant wordlist.
+- Use brute force mode with small length ranges first, such as `--min-length 1 --max-length 4`.
+- Choose the smallest character preset that could contain the password.
+- Avoid large brute force ranges unless you are prepared to wait a long time.
+- Make sure the selected algorithm matches the algorithm used to create the target hash.
+
 ## Learning Objectives
 
 * Practice Python syntax and standard libraries
