@@ -68,7 +68,7 @@ Large wordlists, such as `rockyou.txt`, should not be committed to GitHub.
 
 ## Usage Suggestions
 
-- Start with dictionary mode if you have a relevant wordlist.
+- Start with dictionary mode if you have a relevant wordlist. Dictionary mode is usually much faster than brute force
 - Use brute force mode with small length ranges first, such as `--min-length 1 --max-length 4`.
 - Choose the smallest character preset that could contain the password.
 - Avoid large brute force ranges unless you are prepared to wait a long time.
