@@ -1,4 +1,5 @@
 import argparse
+
 from attacks import CHARACTER_PRESETS
 
 def build_parser():
@@ -89,4 +90,4 @@ def build_parser():
 
 def parse_args():
     parser = build_parser()
-    return parser.parse_args
+    return parser.parse_args()
