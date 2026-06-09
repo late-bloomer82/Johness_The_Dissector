@@ -1,4 +1,5 @@
 import itertools
+
 from helpers import normalize_user_password_hash, hash_password
 
 # allowed preset config
